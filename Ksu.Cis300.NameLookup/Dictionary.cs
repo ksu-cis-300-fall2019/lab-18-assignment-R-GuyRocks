@@ -175,10 +175,11 @@ namespace Ksu.Cis300.NameLookup
             {
                 removed = false;
                 return t;
+
             }
             else
             {
-                int comp = t.Data.Key.CompareTo(key);
+                int comp = key.CompareTo(t.Data.Key);
                 if (comp == 0)
                 {
                     removed = true;
@@ -190,25 +191,20 @@ namespace Ksu.Cis300.NameLookup
                     {
                         return t.LeftChild;
                     }
-                    else if (t.LeftChild != null && t.RightChild != null)
+                    else
                     {
-                        BinaryTreeNode<KeyValuePair<TKey, TValue>> treeNode = new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, RemoveMininumKey(t.RightChild, out KeyValuePair<TKey, TValue> min), t.LeftChild);
-                        
-
-                        return treeNode;
+                        BinaryTreeNode<KeyValuePair<TKey, TValue>> treeNode = RemoveMininumKey(t.RightChild, out KeyValuePair<TKey, TValue> min);
+                        return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(min, t.LeftChild, treeNode);
                     }
                 }
-                if (comp < 0)
+                
+                else if (comp < 0)
                 {
-                    BinaryTreeNode<KeyValuePair<TKey, TValue>> treeNode = Remove(key, t.LeftChild, out bool isRemoved);
-                    removed = isRemoved;
-                    return treeNode;
+                    return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, Remove(key, t.LeftChild, out removed), t.RightChild);
                 }
                 else
                 {
-                    BinaryTreeNode<KeyValuePair<TKey, TValue>> treeNode = Remove(key, t.RightChild, out bool isRemoved);
-                    removed = isRemoved;
-                    return treeNode;
+                    return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, t.LeftChild, Remove(key, t.RightChild, out removed));
                 }
             }
         }
@@ -222,16 +218,8 @@ namespace Ksu.Cis300.NameLookup
         public bool Remove(TKey k)
         {
             CheckKey(k);
-            BinaryTreeNode<KeyValuePair<TKey, TValue>> treeNode = Remove(k, _elements, out bool removed);
-            if (removed == true)
-            {
-                _elements = treeNode;
-                return true;
-            }
-            else
-            { 
-                return false;
-            }
+            _elements = Remove(k, _elements, out bool removed);
+            return removed;           
         }
     }
 }

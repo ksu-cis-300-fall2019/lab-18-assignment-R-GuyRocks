@@ -79,7 +79,7 @@ namespace Ksu.Cis300.NameLookup.Tests
         /// <summary>
         /// Builds a tree with 7 nodes, removes a leaf, then looks up all 7 keys.
         /// </summary>
-        [Test, Timeout(1000)]
+        [Test, Timeout(5000)]
         public void TestCRemoveLeaf()
         {
             Dictionary<int, string> d = LoadDictionary();
