@@ -1,5 +1,6 @@
 ﻿/* Dictionary.cs
  * Author: Rod Howell
+ * Modified by: Riley Smith
  */
 using System;
 using System.Collections.Generic;
@@ -139,6 +140,13 @@ namespace Ksu.Cis300.NameLookup
             _elements = Add(_elements, k, v);
         }
 
+        /// <summary>
+        /// A method that removes the smallest tree node within a tree and returns the tree after the removal. An
+        /// out value is set to the tree node that was removed.
+        /// </summary>
+        /// <param name="t">The tree.</param>
+        /// <param name="min">The smallest tree node.</param>
+        /// <returns>The tree after the removal of the smallest tree node.</returns>
         private static BinaryTreeNode<KeyValuePair<TKey, TValue>> RemoveMininumKey(BinaryTreeNode<KeyValuePair<TKey, TValue>> t, out KeyValuePair<TKey, TValue> min)
         {
             if (t.LeftChild == null)
@@ -152,6 +160,15 @@ namespace Ksu.Cis300.NameLookup
                 return treeNode;
             }   
         }
+
+        /// <summary>
+        /// A method that removes a tree node from the tree. An out value is set to true or false, depending on
+        /// whether or not the removal was successful.
+        /// </summary>
+        /// <param name="key">The key to be removed.</param>
+        /// <param name="t">The tree.</param>
+        /// <param name="removed">A boolean out value which is set to true or false depending on if the removal was successful.</param>
+        /// <returns>The tree after the removal.</returns>
         private static BinaryTreeNode<KeyValuePair<TKey, TValue>> Remove(TKey key, BinaryTreeNode<KeyValuePair<TKey, TValue>> t, out bool removed)
         {
             if (t == null)
@@ -176,7 +193,9 @@ namespace Ksu.Cis300.NameLookup
                     else if (t.LeftChild != null && t.RightChild != null)
                     {
                         BinaryTreeNode<KeyValuePair<TKey, TValue>> treeNode = new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, RemoveMininumKey(t.RightChild, out KeyValuePair<TKey, TValue> min), t.LeftChild);
-                        return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(min, t.LeftChild, treeNode);
+                        
+
+                        return treeNode;
                     }
                 }
                 if (comp < 0)
@@ -194,6 +213,12 @@ namespace Ksu.Cis300.NameLookup
             }
         }
 
+        /// <summary>
+        /// A method that checkes to see if a key can be removed.
+        /// </summary>
+        /// <param name="k">The key that is being checked to see if it can be removed or not.</param>
+        /// <returns>Boolean value true or false, depending on whether or not the key can be removed from the tree.</returns>
+
         public bool Remove(TKey k)
         {
             CheckKey(k);
@@ -203,12 +228,8 @@ namespace Ksu.Cis300.NameLookup
                 _elements = treeNode;
                 return true;
             }
-            else if (removed == false)
-            { 
-                return false;
-            }
             else
-            {
+            { 
                 return false;
             }
         }
